@@ -1,5 +1,6 @@
+package Herencia;
 
-public class Directivo extends Empleado  {
+public class Directivo extends Empleado {
 
     private Integer codigoDespacho;
 

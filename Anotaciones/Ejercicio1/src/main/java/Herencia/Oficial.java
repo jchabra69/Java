@@ -1,3 +1,5 @@
+package Herencia;
+
 public class Oficial extends Operario {
 
     private String categoria;
@@ -9,7 +11,7 @@ public class Oficial extends Operario {
 
     @Override
     public String toString() {
-        return "Oficial{" +
+        return "Herencia.Oficial{" +
                 "categoria='" + categoria + '\'' +
                 '}';
     }

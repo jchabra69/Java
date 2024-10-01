@@ -1,3 +1,5 @@
+package Herencia;
+
 public class Operario extends Empleado {
 
     protected Integer codigoTaller;
@@ -9,7 +11,7 @@ public class Operario extends Empleado {
 
     @Override
     public String toString() {
-        return "Operario {" +
+        return "Herencia.Operario {" +
                 "codigoTaller =" + codigoTaller +
                 '}';
     }
