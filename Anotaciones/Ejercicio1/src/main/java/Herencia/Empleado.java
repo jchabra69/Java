@@ -1,15 +1,17 @@
 package Herencia;
 
+
 public class Empleado {
 
-    protected String nombre, apellidos, direccion, dni, tlf;
+    protected String nombre, apellidos, direccion, dni, tlf, clase;
 
-    public Empleado(String tlf, String dni, String direccion, String apellidos, String nombre) {
+    public Empleado(String tlf, String dni, String direccion, String apellidos, String nombre, String clase) {
         this.tlf = tlf;
         this.dni = dni;
         this.direccion = direccion;
         this.apellidos = apellidos;
         this.nombre = nombre;
+        this.clase = this.getClass().getSimpleName(); // Inicializando el atributo clase
     }
 
     // Getters y Setters
@@ -53,9 +55,27 @@ public class Empleado {
         this.direccion = direccion;
     }
 
+    // Nuevo getter para el atributo 'clase'
+    public String getClase() {
+        return clase;
+    }
+
+    // Nuevo setter para el atributo 'clase'
+    public void setClase(String clase) {
+        this.clase = clase;
+    }
+
     @Override
     public String toString() {
-        return "Empleado {Nombre: " + nombre + ", Apellidos: " + apellidos + ", Dirección: " + direccion +
-                ", DNI: " + dni + ", Teléfono: " + tlf + "}";
+        return "Empleado {" +
+                "Nombre: '" + nombre + '\'' +
+                ", Apellidos: '" + apellidos + '\'' +
+                ", DNI: '" + dni + '\'' +
+                ", Dirección: '" + direccion + '\'' +
+                ", Teléfono: '" + tlf + '\'' +
+                ", Clase: '" + clase + '\'' + // Incluyendo clase en la salida
+                '}';
     }
 }
+
+

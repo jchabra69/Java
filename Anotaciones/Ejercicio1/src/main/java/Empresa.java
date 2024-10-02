@@ -1,8 +1,41 @@
-import Anotaciones.AnotacionEmpleado;
+import Anotaciones.AnotacionDirectivo;
+import Anotaciones.AnotacionOficial;
+import Anotaciones.AnotacionTecnico;
 import Herencia.Empleado;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
+
+//Ejercicio2
+@AnotacionOficial(
+        nombre = "Laura",
+        apellidos = "Gómez Sánchez",
+        dni = "87654321B",
+        direccion = "Avenida de la Libertad 45, 03003, Alicante",
+        telefono = "965123456",
+        codigoTaller = 303,
+        categoria = "Jefa de Taller"
+)
+
+@AnotacionDirectivo(
+        nombre = "Carlos",
+        apellidos = "Pérez Fernández",
+        dni = "12345678A",
+        direccion = "Calle Falsa 123, 28080, Madrid",
+        telefono = "911223344",
+        codigoDespacho = 202
+)
+
+@AnotacionTecnico(
+        nombre = "Amancio",
+        apellidos = "Ortega",
+        dni = "66554433F",
+        direccion = "AV. DIPUTACION S/N, P.I. SABON 15142, ARTEIXO, LA CORUÑA",
+        telefono = "981185596",
+        codigoTaller = 101,
+        perfil = "Desarrollador de Software"
+)
+
+/* Ejercicio1
 
 //Herencia.Directivo
 @AnotacionEmpleado(
@@ -37,10 +70,13 @@ import java.util.ArrayList;
         codigoDespacho = 8
 )
 
+*/
+
 public class Empresa {
 
     private String nombre;
-    private ArrayList<Empleado> misEmpleados;
+    private final ArrayList<Empleado> misEmpleados;
+
 
     public Empresa(String nombre) {
         this.nombre = nombre;
@@ -53,25 +89,6 @@ public class Empresa {
 
     }
 
-    //Procesa las anotaciones de Empresa, es decir, carga cada anotacion a un empleado y lo agrega al array
-    public static Empresa cargadorDeContexto() throws NoSuchMethodException, SecurityException {
-
-        Empresa miEmpresa = new Empresa("Testing");
-
-        //Necesito este método para usarlo con las anotaciones y agregar lo que se lea de ellas al ArrayList
-        Method m = miEmpresa.getClass().getMethod("agregarEmpleado", Empleado.class);
-
-        //Leo la anotación
-        AnotacionEmpleado miAnotacion = m.getAnnotation(AnotacionEmpleado.class);
-
-        //Y uso el método de agregar de mi objeto Empresa junto a la lectura de la Anotación
-
-        miEmpresa.agregarEmpleado((Empleado) miAnotacion); //No puedo hacer esto, comerme el tarro (?)
-
-        return miEmpresa;
-    }
-
-
 
     public String getNombre() {
         return nombre;
@@ -83,7 +100,6 @@ public class Empresa {
 
     @Override
     public String toString() {
-
         StringBuilder sb = new StringBuilder();
 
         for (Empleado empleado : misEmpleados) {
