@@ -278,6 +278,11 @@ class TiendaTest {
                     .map(fabricante -> "Nombre: " + fabricante.getNombre())
                     .forEach(System.out::println);
 
+            /*
+            * Es más eficiente ordenar después de map, tal como
+            * .map
+            * .sorted
+            * */
 
         } catch (RuntimeException e) {
             fabricantesDAOImpl.rollbackTransaction();
@@ -453,6 +458,7 @@ class TiendaTest {
             listProd.stream()
                     .filter(producto -> producto.getPrecio() <= 120)
                     .map(producto -> "Nombre: " +producto.getNombre() + ", Precio: " + producto.getPrecio())
+                    //Me puedo ahorrar el map modificado el string en el for each
                     .forEach(System.out::println);
 
         } catch (RuntimeException e) {
@@ -787,6 +793,12 @@ class TiendaTest {
             List<Producto> listProd = productosDAOImpl.findAll();
 
             //TODO STREAMS
+            listProd.stream()
+
+                    .filter(producto -> producto.getFabricante().getNombre().equals("Asus") || producto.getFabricante().getNombre().equals("Hewlett-Packard") ||
+                                    producto.getFabricante().getNombre().equals("Seagate"))
+                    .forEach(System.out::println);
+
 
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
