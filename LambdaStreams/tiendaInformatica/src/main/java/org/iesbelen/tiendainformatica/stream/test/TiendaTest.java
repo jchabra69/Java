@@ -896,7 +896,27 @@ class TiendaTest {
 
             List<Fabricante> listFab = fabricantesDAOImpl.findAll();
 
+
             //TODO STREAMS
+
+            //Los productos están asociados a fabricantes gracias a la columna idfabricante
+            listFab.stream()
+
+                  //Y hay un metodo que devuelve un set de productos
+
+                    //Así que utilizo flatmap para hacer un stream de producto
+                    .flatMap(fabricante -> fabricante.getProductos().stream()
+
+                            //Y necesito map para acceder a ambos y hacer el string
+                            .map(producto -> "Fabricante: " +fabricante.getNombre() + "\n Producto: " +producto.getNombre())
+
+                            //RECUERDA QUE EL .MAP DEBE ESTAR DENTRO DEL FLATMAP
+
+                    )
+
+                    //Ahora recorro todo ese stream como de costumbre
+                    .forEach(System.out::println);
+
 
         } catch (RuntimeException e) {
             fabricantesDAOImpl.rollbackTransaction();
@@ -916,6 +936,11 @@ class TiendaTest {
             List<Fabricante> listFab = fabricantesDAOImpl.findAll();
 
             //TODO STREAMS
+            listFab.stream()
+
+                    .filter(fabricante -> fabricante.getProductos().isEmpty())
+                    .forEach(fabricante -> System.out.println("Fabricante sin productos: " + fabricante.getNombre()));
+
 
         } catch (RuntimeException e) {
             fabricantesDAOImpl.rollbackTransaction();
@@ -935,6 +960,12 @@ class TiendaTest {
             List<Producto> listProd = productosDAOImpl.findAll();
 
             //TODO STREAMS
+            long cuenta = listProd.stream().count();
+
+            System.out.println("Hay un total de " +cuenta + " productos");
+
+
+
 
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
@@ -955,6 +986,20 @@ class TiendaTest {
             List<Producto> listProd = productosDAOImpl.findAll();
 
             //TODO STREAMS
+
+            long cantidadFabricantesConProductos = listProd.stream()
+
+                    //long cuenta = listProd.stream().count();
+                    //Filtra por los que no están vacíos
+                    .filter(producto -> producto.getFabricante() != null && !producto.getFabricante().getProductos().isEmpty())
+
+                    .distinct() // Asegura que solo contemos cada fabricante una vez
+                    // Contamos los fabricantes únicos
+                    .count();
+
+            System.out.println("Nº de fabricantes con productos: " + cantidadFabricantesConProductos);
+
+
 
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
@@ -977,6 +1022,14 @@ class TiendaTest {
 
             //TODO STREAMS
 
+            OptionalDouble media = listProd.stream()
+
+                    .mapToDouble(Producto::getPrecio)
+                    .average();
+
+            System.out.println("La media de los precios es: " +Math.round(media.getAsDouble() *100.0) / 100.0);
+
+
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
             throw e; // or display error message
@@ -995,6 +1048,11 @@ class TiendaTest {
             List<Producto> listProd = productosDAOImpl.findAll();
 
             //TODO STREAMS
+            listProd.stream()
+
+                    .min(Comparator.comparing(Producto::getPrecio))
+                    .ifPresent(producto -> System.out.println("El producto más barato es: " +producto.toString()));
+
 
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
@@ -1014,6 +1072,12 @@ class TiendaTest {
             List<Producto> listProd = productosDAOImpl.findAll();
 
             //TODO STREAMS
+            double sumaPreciosProductos = listProd.stream()
+
+                    .mapToDouble(Producto::getPrecio)
+                    .sum();
+
+            System.out.println("La suma de los precios de todos los productos equivale a: " +sumaPreciosProductos + "€");
 
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
@@ -1034,6 +1098,16 @@ class TiendaTest {
 
             //TODO STREAMS
 
+            long cuentaProductosAsus = listProd.stream()
+
+                    //Filtro los productos que son de Asus
+                    .filter(producto -> producto.getFabricante().getNombre().equalsIgnoreCase("Asus"))
+                    //Y ahora debería contar sus productos
+
+                    .count();
+
+            System.out.println("El fabricante Asus tiene: " + cuentaProductosAsus + " productos");
+
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
             throw e; // or display error message
@@ -1041,7 +1115,7 @@ class TiendaTest {
     }
 
     /**
-     * 36. Calcula la media del precio de todos los productosdel fabricante Asus.
+     * 36. Calcula la media del precio de todos los productos del fabricante Asus.
      */
     @Test
     void test36() {
@@ -1052,6 +1126,15 @@ class TiendaTest {
             List<Producto> listProd = productosDAOImpl.findAll();
 
             //TODO STREAMS
+
+            OptionalDouble media = listProd.stream()
+
+                    .filter(producto -> producto.getFabricante().getNombre().equalsIgnoreCase("Asus"))
+                    .mapToDouble(Producto::getPrecio)
+                    .average();
+
+            System.out.println("La media del precio de todos los productos del fabricante Asus es: " +media.orElse(0));
+
 
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
@@ -1073,6 +1156,16 @@ class TiendaTest {
             List<Producto> listProd = productosDAOImpl.findAll();
 
             //TODO STREAMS
+            listProd.stream()
+
+                    //APRENDER A USAR REDUCER
+                    .filter(producto -> producto.getFabricante().getNombre().equalsIgnoreCase("Crucial"));
+
+
+
+
+
+
 
         } catch (RuntimeException e) {
             productosDAOImpl.rollbackTransaction();
