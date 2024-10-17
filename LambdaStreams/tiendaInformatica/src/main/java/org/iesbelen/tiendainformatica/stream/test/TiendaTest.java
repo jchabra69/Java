@@ -1241,7 +1241,6 @@ class TiendaTest {
 
                 .forEach(fab -> {long numProductos = fab.getProductos().size(); // Cuenta los productos del fabricante
 
-
                 System.out.printf("%-20s %d%n", fab.getNombre(), numProductos);
             });
 
@@ -1264,44 +1263,25 @@ class TiendaTest {
 
             List<Fabricante> listFab = fabricantesDAOImpl.findAll();
 
-            listFab.forEach(fab -> {
+/*
+            listFab.stream()
+                    .map(fab -> {
+                        // Este objeto es más fácil que .reduce
+                        DoubleSummaryStatistics stats = fab.getProductos().stream()
+                                .mapToDouble(Producto::getPrecio)
+                                .summaryStatistics(); // Resumen estadístico de los precios
 
+                        double precioMinimo = stats.getMin();
+                        double precioMaximo = stats.getMax();
+                        double precioMedio = stats.getAverage();
 
-                Double[] resultados = fab.getProductos().stream()
+                        System.out.println("Fabricante: " + fab.getNombre() +
+                                " Precio máximo: " + precioMaximo +
+                                " Precio mínimo: " + precioMinimo +
+                                " Precio medio: " + precioMedio);
+                    });
+*/
 
-                        .map(Producto::getPrecio)
-
-                        .reduce(new Double[]{Double.MAX_VALUE, Double.MIN_VALUE, 0.0, 0.0},
-
-                                (acumulador, precioActual) -> {
-                                    // Actualiza el acumulador
-                                    acumulador[0] = Math.min(acumulador[0], precioActual);
-                                    acumulador[1] = Math.max(acumulador[1], precioActual);
-                                    acumulador[2] += precioActual; //Suma el anterior con el actual
-                                    acumulador[3] += 1; //Cuenta uno mñas
-
-                                    return acumulador;
-                                },
-                                (acc1, acc2) -> {
-                                    // Combinación de resultados si es necesario
-                                    acc1[0] = Math.min(acc1[0], acc2[0]);
-                                    acc1[1] = Math.max(acc1[1], acc2[1]);
-                                    acc1[2] += acc2[2];
-                                    acc1[3] += acc2[3];
-                                    return acc1;
-                                });
-
-                // Mostrar el nombre del fabricante y los resultados
-                double precioMinimo = resultados[0];
-                double precioMaximo = resultados[1];
-                double sumaPrecios = resultados[2];
-                double cuentaProductos = resultados[3];
-                double precioMedio = cuentaProductos > 0 ? sumaPrecios / cuentaProductos : 0; 
-
-                // Formato de salida
-                System.out.printf("Fabricante: %s, Precio mínimo: %.2f, Precio máximo: %.2f, Precio medio: %.2f%n",
-                        fab.getNombre(), precioMinimo, precioMaximo, precioMedio);
-            });
 
         } catch (RuntimeException e) {
             fabricantesDAOImpl.rollbackTransaction();
@@ -1395,6 +1375,24 @@ class TiendaTest {
             List<Fabricante> listFab = fabricantesDAOImpl.findAll();
 
             //TODO STREAMS
+
+             /*listFab.stream()
+
+
+             .map(fabricante -> fabricante.getProductos().stream()
+
+                           .filter(producto -> producto.getPrecio() >= 200)
+                           .sorted(Comparator.comparing(Producto::getPrecio))
+
+                   ) */
+
+
+
+
+
+
+
+
 
         } catch (RuntimeException e) {
             fabricantesDAOImpl.rollbackTransaction();
