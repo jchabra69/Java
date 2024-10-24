@@ -833,6 +833,7 @@ Monitor 27 LED Full HD |199.25190000000003|Asus
 			List<Producto> listProd = productosDAOImpl.findAll();
 
 			//TODO STREAMS
+			
 
 		}
 		catch (RuntimeException e) {
