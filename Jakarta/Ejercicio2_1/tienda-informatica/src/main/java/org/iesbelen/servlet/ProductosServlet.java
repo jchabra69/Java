@@ -6,11 +6,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.iesbelen.dao.FabricanteDAOImpl;
 import org.iesbelen.dao.ProductoDAO;
 import org.iesbelen.dao.ProductoDAOImpl;
+import org.iesbelen.model.Fabricante;
 import org.iesbelen.model.Producto;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "productosServlet", value = "/tienda/productos/*")
 public class ProductosServlet extends HttpServlet {
@@ -59,8 +62,15 @@ public class ProductosServlet extends HttpServlet {
 				
 				// GET
 				// /productos/crear
-				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/crear-producto.jsp");
-        												
+				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/productos/crear-producto.jsp");
+
+				//lógica necesaria que cargue la lista de fabricantes junto con sus códigos para la vista crear-producto.jsp
+				FabricanteDAOImpl fabDAO = new FabricanteDAOImpl();
+				List<Fabricante> listaFabricantes = fabDAO.getAll();
+
+				request.setAttribute("listaFabricantes", listaFabricantes);
+
+
 			
 			} else if (pathParts.length == 2) {
 				ProductoDAO fabDAO = new ProductoDAOImpl();
@@ -108,16 +118,20 @@ public class ProductosServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		RequestDispatcher dispatcher;
-		String __method__ = request.getMethod();
+		String __method__ = request.getParameter("__method__");
 		
 		if (__method__ == null) {
 			// Crear uno nuevo
 			ProductoDAO fabDAO = new ProductoDAOImpl();
 			
 			String nombre = request.getParameter("nombre");
-			Producto nuevoFab = new Producto();
-			nuevoFab.setNombre(nombre);
-			fabDAO.create(nuevoFab);			
+			String precio = request.getParameter("precio");
+			int fabricante = Integer.parseInt(request.getParameter("selectFabricante"));
+			Producto nuevoProducto = new Producto();
+			nuevoProducto.setNombre(nombre);
+			nuevoProducto.setPrecio(Double.parseDouble(precio));
+			nuevoProducto.setCodigo_fabricante(fabricante);
+			fabDAO.create(nuevoProducto);
 			
 		} else if (__method__ != null && "put".equalsIgnoreCase(__method__)) {			
 			// Actualizar uno existente

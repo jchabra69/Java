@@ -38,8 +38,8 @@ public class FabricantesServlet extends HttpServlet {
 		RequestDispatcher dispatcher;
 				
 		String pathInfo = request.getPathInfo(); //
-			
-		if (pathInfo == null || "/".equals(pathInfo)) {
+
+		if (pathInfo == null ) {
 			FabricanteDAO fabDAO = new FabricanteDAOImpl();
 			ProductoDAO prodDAO = new ProductoDAOImpl();
 			List<FabricanteDTO> misFabricantillos = new ArrayList<>();
@@ -47,11 +47,34 @@ public class FabricantesServlet extends HttpServlet {
 			for(Fabricante fabricante : fabDAO.getAll()){
 				misFabricantillos.add(new FabricanteDTO(fabricante));
 			}
-			
+
+
 			//GET 
 			//	/fabricantes/
 			//	/fabricantes
-			
+
+
+			String ordenarPor = request.getParameter("ordenado-por");
+			String modo = request.getParameter("modo");
+
+			if(ordenarPor != null && ordenarPor.equalsIgnoreCase("nombre")){
+
+				if(modo != null && modo.equalsIgnoreCase("desc")) {
+
+					request.setAttribute("listaFabricantesDTO", fabDAO.getOrdenadoPorNombreDesc());
+
+				} else if (modo != null && modo.equalsIgnoreCase("asc")) {
+
+					request.setAttribute("listaFabricantesDTO", fabDAO.getOrdenadoPorNombreAsc());
+
+				}
+
+			} else if (ordenarPor != null && ordenarPor.equalsIgnoreCase("codigo")) {
+
+
+			}
+
+			//ESTO SIEMPRE SE EJECUTA, Y NO QUEREMOS QUE PASE ESO
 			request.setAttribute("listaFabricantesDTO", fabDAO.getAll());
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/fabricantes.jsp");
 			        		       
@@ -72,6 +95,7 @@ public class FabricantesServlet extends HttpServlet {
 				// GET
 				// /fabricantes/crear
 				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/crear-fabricante.jsp");
+
 
 			} else if (pathParts.length == 2) {
 				FabricanteDAO fabDAO = new FabricanteDAOImpl();
@@ -104,7 +128,7 @@ public class FabricantesServlet extends HttpServlet {
 			
 			}
 		}
-		
+
 		dispatcher.forward(request, response);
 	}
 	

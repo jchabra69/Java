@@ -48,6 +48,30 @@
 				</form>
 			</div>
 		</div>
+
+
+		<!--Ordenar por nombre/codigo de manera ascendente o descendente
+		-->
+		<div>
+
+			<form action="${pageContext.request.contextPath}/tienda/fabricantes/">
+
+				<select name="ordenado-por">
+					<option value = "nombre">Nombre</option>
+					<option value = "codigo">Código</option>
+				</select>
+
+				<select name="modo">
+					<option value = "asc">Ascendente</option>
+					<option value = "desc">Descendente</option>
+				</select>
+
+				<input type="submit" value="ordenar">
+
+			</form>
+
+		</div>
+
 	</div>
 	<div class="clearfix">
 		<hr/>
