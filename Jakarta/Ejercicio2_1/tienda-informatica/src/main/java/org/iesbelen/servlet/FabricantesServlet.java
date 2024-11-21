@@ -1,6 +1,8 @@
 package org.iesbelen.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -11,6 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.iesbelen.dao.FabricanteDAO;
 import org.iesbelen.dao.FabricanteDAOImpl;
+import org.iesbelen.dao.ProductoDAO;
+import org.iesbelen.dao.ProductoDAOImpl;
+import org.iesbelen.dto.FabricanteDTO;
 import org.iesbelen.model.Fabricante;
 
 @WebServlet(name = "fabricantesServlet", value = "/tienda/fabricantes/*")
@@ -36,12 +41,18 @@ public class FabricantesServlet extends HttpServlet {
 			
 		if (pathInfo == null || "/".equals(pathInfo)) {
 			FabricanteDAO fabDAO = new FabricanteDAOImpl();
+			ProductoDAO prodDAO = new ProductoDAOImpl();
+			List<FabricanteDTO> misFabricantillos = new ArrayList<>();
+
+			for(Fabricante fabricante : fabDAO.getAll()){
+				misFabricantillos.add(new FabricanteDTO(fabricante));
+			}
 			
 			//GET 
 			//	/fabricantes/
 			//	/fabricantes
 			
-			request.setAttribute("listaFabricantes", fabDAO.getAll());		
+			request.setAttribute("listaFabricantesDTO", fabDAO.getAll());
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/fabricantes.jsp");
 			        		       
 		} else {
