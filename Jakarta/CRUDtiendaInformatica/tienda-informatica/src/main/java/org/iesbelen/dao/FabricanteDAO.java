@@ -14,5 +14,7 @@ public interface FabricanteDAO {
 	public void delete(int id);
 	public List<Fabricante> getOrdenadoPorNombreDesc();
 	public List<Fabricante> getOrdenadoPorNombreAsc();
+	public List<Fabricante> getOrdenadoPorCodigoDesc();
+	public List<Fabricante> getOrdenadoPorCodigoAsc();
 
 }

@@ -303,4 +303,72 @@ public class FabricanteDAOImpl extends AbstractDAOImpl implements FabricanteDAO{
 
 	}
 
+	public List<Fabricante> getOrdenadoPorCodigoAsc() {
+
+		Connection conn = null;
+		Statement s = null;
+		ResultSet rs = null;
+
+		List<Fabricante> listFab = new ArrayList<>();
+
+		try {
+			conn = connectDB();
+
+			// Se utiliza un objeto Statement dado que no hay parámetros en la consulta.
+			s = conn.createStatement();
+
+			rs = s.executeQuery("SELECT * FROM fabricantes ORDER BY idFabricante asc");
+			while (rs.next()) {
+				Fabricante fab = new Fabricante();
+				int idx = 1;
+				fab.setIdFabricante(rs.getInt(idx++));
+				fab.setNombre(rs.getString(idx));
+				listFab.add(fab);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			closeDb(conn, s, rs);
+		}
+		return listFab;
+
+	}
+
+	public List<Fabricante> getOrdenadoPorCodigoDesc() {
+
+		Connection conn = null;
+		Statement s = null;
+		ResultSet rs = null;
+
+		List<Fabricante> listFab = new ArrayList<>();
+
+		try {
+			conn = connectDB();
+
+			// Se utiliza un objeto Statement dado que no hay parámetros en la consulta.
+			s = conn.createStatement();
+
+			rs = s.executeQuery("SELECT * FROM fabricantes ORDER BY idFabricante desc");
+			while (rs.next()) {
+				Fabricante fab = new Fabricante();
+				int idx = 1;
+				fab.setIdFabricante(rs.getInt(idx++));
+				fab.setNombre(rs.getString(idx));
+				listFab.add(fab);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			closeDb(conn, s, rs);
+		}
+		return listFab;
+
+	}
+
 }

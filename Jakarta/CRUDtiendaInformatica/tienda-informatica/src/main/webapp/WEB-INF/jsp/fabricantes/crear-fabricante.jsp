@@ -2,6 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@page import="org.iesbelen.model.Fabricante"%>
 <%@page import="java.util.Optional"%>
+
+<%@ include file="/WEB-INF/jsp/fragmentos/header.jspf" %>
+<%@ include file="/WEB-INF/jsp/fragmentos/nav.jspf" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,3 +55,6 @@
 
 </body>
 </html>
+
+<%@ include file ="/WEB-INF/jsp/fragmentos/footer.jspf"%>
+<%@ include file ="/WEB-INF/jsp/fragmentos/style.jspf"%>

@@ -1,0 +1,10 @@
+<!-- Menu Navigation Bar -->
+<nav class="menu">
+    <a href="${pageContext.request.contextPath}">HOME</a>
+    <a href="${pageContext.request.contextPath}/tienda/fabricantes/">Fabricantes</a>
+    <a href="${pageContext.request.contextPath}/tienda/productos/">Productos</a>
+    <a href="${pageContext.request.contextPath}/tienda/usuarios/">Usuarios</a>
+    <div class="menu-log">
+        <a href="#login">LOGIN</a>
+    </div>
+</nav>

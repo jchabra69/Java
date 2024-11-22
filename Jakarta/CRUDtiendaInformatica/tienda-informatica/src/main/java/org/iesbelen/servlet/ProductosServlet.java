@@ -1,35 +1,32 @@
 package org.iesbelen.servlet;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.iesbelen.dao.FabricanteDAO;
 import org.iesbelen.dao.FabricanteDAOImpl;
 import org.iesbelen.dao.ProductoDAO;
 import org.iesbelen.dao.ProductoDAOImpl;
-import org.iesbelen.dto.FabricanteDTO;
 import org.iesbelen.model.Fabricante;
+import org.iesbelen.model.Producto;
 
-@WebServlet(name = "fabricantesServlet", value = "/tienda/fabricantes/*")
-public class FabricantesServlet extends HttpServlet {
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet(name = "productosServlet", value = "/tienda/productos/*")
+public class ProductosServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * HTTP Method: GET
 	 * Paths: 
-	 * 		/fabricantes/
-	 * 		/fabricantes/{id}
-	 * 		/fabricantes/editar{id}
-	 * 		/fabricantes/crear
+	 * 		/productos/
+	 * 		/productos/{id}
+	 * 		/productos/editar{id}
+	 * 		/productos/crear
 	 */		
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,54 +35,40 @@ public class FabricantesServlet extends HttpServlet {
 		RequestDispatcher dispatcher;
 				
 		String pathInfo = request.getPathInfo(); //
-
-		if (pathInfo == null ) {
-			FabricanteDAO fabDAO = new FabricanteDAOImpl();
-			ProductoDAO prodDAO = new ProductoDAOImpl();
-			List<FabricanteDTO> misFabricantillos = new ArrayList<>();
-
-			for(Fabricante fabricante : fabDAO.getAll()){
-				misFabricantillos.add(new FabricanteDTO(fabricante));
-			}
-
-
+			
+		if (pathInfo == null || "/".equals(pathInfo)) {
+			ProductoDAO productoDAO = new ProductoDAOImpl();
+			
 			//GET 
-			//	/fabricantes/
-			//	/fabricantes
+			//	/productos/
+			//	/productos
 
+			String busqueda = request.getParameter("filtrar-por-nombre");
 
-			String ordenarPor = request.getParameter("ordenado-por");
-			String modo = request.getParameter("modo");
+			if (busqueda != null) {
 
-			if(ordenarPor != null && ordenarPor.equalsIgnoreCase("nombre")){
+				List<Producto> resultados = productoDAO.buscarPorNombre(busqueda);
+				if (!resultados.isEmpty()) {
 
-				if(modo != null && modo.equalsIgnoreCase("desc")) {
-
-					request.setAttribute("listaFabricantesDTO", fabDAO.getOrdenadoPorNombreDesc());
-
-				} else if (modo != null && modo.equalsIgnoreCase("asc")) {
-
-					request.setAttribute("listaFabricantesDTO", fabDAO.getOrdenadoPorNombreAsc());
+					request.setAttribute("listaProductos", resultados);
 
 				}
 
-			} else if (ordenarPor != null && ordenarPor.equalsIgnoreCase("codigo")) {
-
+			} else {
+				request.setAttribute("listaProductos", productoDAO.getAll());
 
 			}
 
-			//ESTO SIEMPRE SE EJECUTA, Y NO QUEREMOS QUE PASE ESO
-			request.setAttribute("listaFabricantesDTO", fabDAO.getAll());
-			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/fabricantes.jsp");
+			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/productos/productos.jsp");
 			        		       
 		} else {
 			// GET
-			// 		/fabricantes/{id}
-			// 		/fabricantes/{id}/
-			// 		/fabricantes/edit/{id}
-			// 		/fabricantes/edit/{id}/
-			// 		/fabricantes/crear
-			// 		/fabricantes/crear/
+			// 		/productos/{id}
+			// 		/productos/{id}/
+			// 		/productos/edit/{id}
+			// 		/productos/edit/{id}/
+			// 		/productos/crear
+			// 		/productos/crear/
 			
 			pathInfo = pathInfo.replaceAll("/$", "");
 			String[] pathParts = pathInfo.split("/");
@@ -93,43 +76,56 @@ public class FabricantesServlet extends HttpServlet {
 			if (pathParts.length == 2 && "crear".equals(pathParts[1])) {
 				
 				// GET
-				// /fabricantes/crear
-				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/crear-fabricante.jsp");
+				// /productos/crear
+				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/productos/crear-producto.jsp");
+
+				//lógica necesaria que cargue la lista de fabricantes junto con sus códigos para la vista crear-producto.jsp
+				FabricanteDAOImpl fabDAO = new FabricanteDAOImpl();
+				List<Fabricante> listaFabricantes = fabDAO.getAll();
+
+				request.setAttribute("listaFabricantes", listaFabricantes);
 
 
+			
 			} else if (pathParts.length == 2) {
-				FabricanteDAO fabDAO = new FabricanteDAOImpl();
+				ProductoDAO fabDAO = new ProductoDAOImpl();
 				// GET
-				// /fabricantes/{id}
+				// /productos/{id}
 				try {
-					request.setAttribute("fabricante",fabDAO.find(Integer.parseInt(pathParts[1])));
-					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/detalle-fabricante.jsp");
+					request.setAttribute("producto",fabDAO.find(Integer.parseInt(pathParts[1])));
+					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/detalle-producto.jsp");
 
 				} catch (NumberFormatException nfe) {
 					nfe.printStackTrace();
-					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/fabricantes.jsp");
+					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/productos/productos.jsp");
 				}
+				
 			} else if (pathParts.length == 3 && "editar".equals(pathParts[1]) ) {
-				FabricanteDAO fabDAO = new FabricanteDAOImpl();
+				ProductoDAO fabDAO = new ProductoDAOImpl();
 				
 				// GET
-				// /fabricantes/editar/{id}
+				// /productos/editar/{id}
 				try {
-					request.setAttribute("fabricante",fabDAO.find(Integer.parseInt(pathParts[2])));
-					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/editar-fabricante.jsp");
+					request.setAttribute("producto",fabDAO.find(Integer.parseInt(pathParts[2])));
+					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/editar-producto.jsp");
 					        								
 				} catch (NumberFormatException nfe) {
 					nfe.printStackTrace();
-					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/fabricantes.jsp");
+					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/productos/productos.jsp");
 				}
+				
+				
 			} else {
+				
 				System.out.println("Opción POST no soportada.");
-				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes/fabricantes.jsp");
+				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/productos/productos.jsp");
 			
 			}
+			
 		}
-
+		
 		dispatcher.forward(request, response);
+			 
 	}
 	
 	@Override
@@ -141,12 +137,16 @@ public class FabricantesServlet extends HttpServlet {
 		
 		if (__method__ == null) {
 			// Crear uno nuevo
-			FabricanteDAO fabDAO = new FabricanteDAOImpl();
+			ProductoDAO fabDAO = new ProductoDAOImpl();
 			
 			String nombre = request.getParameter("nombre");
-			Fabricante nuevoFab = new Fabricante();
-			nuevoFab.setNombre(nombre);
-			fabDAO.create(nuevoFab);			
+			String precio = request.getParameter("precio");
+			int fabricante = Integer.parseInt(request.getParameter("selectFabricante"));
+			Producto nuevoProducto = new Producto();
+			nuevoProducto.setNombre(nombre);
+			nuevoProducto.setPrecio(Double.parseDouble(precio));
+			nuevoProducto.setCodigo_fabricante(fabricante);
+			fabDAO.create(nuevoProducto);
 			
 		} else if (__method__ != null && "put".equalsIgnoreCase(__method__)) {			
 			// Actualizar uno existente
@@ -154,15 +154,16 @@ public class FabricantesServlet extends HttpServlet {
 			doPut(request, response);
 
 		} else if (__method__ != null && "delete".equalsIgnoreCase(__method__)) {			
-			// Borrar uno existente
+			// Actualizar uno existente
 			//Dado que los forms de html sólo soportan method GET y POST utilizo parámetro oculto para indicar la operación de actulización DELETE.
 			doDelete(request, response);
+
 		} else {
 			System.out.println("Opción POST no soportada.");
 		}
 
-		//response.sendRedirect("../../../tienda/fabricantes");
-		response.sendRedirect(request.getContextPath() + "/tienda/fabricantes");
+		//response.sendRedirect("../../../tienda/productos");
+		response.sendRedirect(request.getContextPath() + "/tienda/productos");
 	}
 	
 	
@@ -170,14 +171,15 @@ public class FabricantesServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		FabricanteDAO fabDAO = new FabricanteDAOImpl();
+		ProductoDAO fabDAO = new ProductoDAOImpl();
 		String codigo = request.getParameter("codigo");
 		String nombre = request.getParameter("nombre");
-		Fabricante fab = new Fabricante();
+		Producto fab = new Producto();
 		
 		try {
+			
 			int id = Integer.parseInt(codigo);
-			fab.setIdFabricante(id);
+			fab.setIdProducto(id);
 			fab.setNombre(nombre);
 			fabDAO.update(fab);
 			
@@ -191,13 +193,14 @@ public class FabricantesServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 	{
 		RequestDispatcher dispatcher;
-		FabricanteDAO fabDAO = new FabricanteDAOImpl();
+		ProductoDAO fabDAO = new ProductoDAOImpl();
 		String codigo = request.getParameter("codigo");
 		
 		try {
+			
 			int id = Integer.parseInt(codigo);
 		
-			fabDAO.delete(id);
+		fabDAO.delete(id);
 			
 		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
