@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.iesbelen.dao.*;
 import org.iesbelen.model.Usuario;
+import org.iesbelen.utils.HashUtil;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -123,9 +124,17 @@ public class UsuarioServlet extends HttpServlet {
 
             Usuario usuario = new Usuario();
 
+
             usuario.setNombreUsuario(nombre);
-            usuario.setPassword(password);
+            try {
+                usuario.setPassword(HashUtil.hashPassword(password));
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
             usuario.setRol(rol);
+
+
+            //Lo de cifrar la contraseña no se hace en DAO, sino aquí
 
             try {
                 usrDao.create(usuario);
@@ -168,7 +177,11 @@ public class UsuarioServlet extends HttpServlet {
 
             if (password != null && !password.isEmpty()) {
                 // Si hay nueva contraseña, la ciframos tmb
-                usuario.setPassword(password);
+                try {
+                    usuario.setPassword(HashUtil.hashPassword(password));
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             //Y actualizamos en la base de datos

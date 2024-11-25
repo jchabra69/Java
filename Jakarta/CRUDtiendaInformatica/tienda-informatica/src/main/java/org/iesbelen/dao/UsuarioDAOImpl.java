@@ -29,7 +29,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         ResultSet rsGenKeys = null;
 
         // Generar el hash de la contraseña
-        String hashedPassword = HashUtil.hashPassword(usuario.getPassword());  // Aquí generamos el hash
+        //String hashedPassword = HashUtil.hashPassword(usuario.getPassword());  // Aquí generamos el hash
 
         try {
             conn = connectDB();
@@ -38,7 +38,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
             int idx = 1;
             ps.setString(idx++, usuario.getNombreUsuario());
-            ps.setString(idx++, hashedPassword); //Aquí debería generar la contraseña con la clase HashUtil no?
+            ps.setString(idx++, usuario.getPassword()); //Aquí debería generar la contraseña con la clase HashUtil no?
             ps.setString(idx++, usuario.getRol());
 
             int rows = ps.executeUpdate();
@@ -149,19 +149,16 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         try {
             conn = connectDB();
 
-            // Si la contraseña ha sido cambiada, la ciframos antes de actualizarla
+            // Obtener la contraseña sin hashear del objeto Usuario
             String passwordToUpdate = usuario.getPassword();
 
-            if (passwordToUpdate != null && !passwordToUpdate.isEmpty()) {
-                // Hashear la contraseña nueva
-                passwordToUpdate = HashUtil.hashPassword(passwordToUpdate);
-            }
+            /*EN BASES DE DATOS, TODO SE RECIBE COMO STRING, POR LO TANTO LA CONTRASEÑA YA DEBE VENIR
+            //HASHEADA DE FUERA*/
 
-            // Preparar la sentencia de actualización
             ps = conn.prepareStatement("UPDATE usuarios SET usuario = ?, password = ?, rol = ? WHERE idUsuario = ?");
             int idx = 1;
             ps.setString(idx++, usuario.getNombreUsuario());
-            ps.setString(idx++, passwordToUpdate); // Aquí se setea la contraseña hasheada
+            ps.setString(idx++, passwordToUpdate); // Aquí se setea la contraseña sin hashear
             ps.setString(idx++, usuario.getRol());
             ps.setInt(idx, usuario.getIdUsuario());
 
@@ -175,12 +172,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
         } finally {
             closeDb(conn, ps, null);
         }
     }
+
 
 
     /**

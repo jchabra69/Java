@@ -31,12 +31,6 @@
                 </div>
             </div>
 
-            <!--Botón para ir a crear-usuario.jsp-->
-            <div style="position: absolute; left: 39%; top : 39%;">
-                <form action="${pageContext.request.contextPath}/tienda/usuarios/crear">
-                    <input type="submit" value="Crear">
-                </form>
-            </div>
 
             <div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
                 <!-- Línea Horizontal TOP -->
@@ -105,6 +99,13 @@
                 %>
             </div>
 
+        </div>
+
+        <!--Botón para ir a crear-usuario.jsp-->
+        <div style="position: absolute; left: 39%; top : 39%;">
+            <form action="${pageContext.request.contextPath}/tienda/usuarios/crear">
+                <input type="submit" value="Crear">
+            </form>
         </div>
 
     </section>
