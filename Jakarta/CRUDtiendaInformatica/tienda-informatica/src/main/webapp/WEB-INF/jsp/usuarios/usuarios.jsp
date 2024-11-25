@@ -101,12 +101,14 @@
 
         </div>
 
-        <!--Botón para ir a crear-usuario.jsp-->
-        <div style="position: absolute; left: 39%; top : 39%;">
+
+        <!--Botónsitoo-->
+        <div style="text-align: center; margin-top: 20px;">
             <form action="${pageContext.request.contextPath}/tienda/usuarios/crear">
                 <input type="submit" value="Crear">
             </form>
         </div>
+
 
     </section>
 
