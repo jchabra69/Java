@@ -7,16 +7,15 @@
 
     <div class="menu-log">
         <%
-            // Variable navUsuario, para evitar conflicto con otras páginas
             Usuario navUsuario = (Usuario) request.getSession(false).getAttribute("usuarioLogueado");
             if (navUsuario != null) {
         %>
-        <!-- Si está logueado, mostrar el enlace de logout -->
+        <!-- Si está logueado, muestro el logout -->
         <a href="${pageContext.request.contextPath}/tienda/usuarios/logout">Logout</a>
         <%
         } else {
         %>
-        <!-- Si no está logueado, mostrar el enlace de login -->
+        <!-- Si no lo está, muestro el Login simplemente -->
         <a href="${pageContext.request.contextPath}/tienda/usuarios/login">Login</a>
         <%
             }

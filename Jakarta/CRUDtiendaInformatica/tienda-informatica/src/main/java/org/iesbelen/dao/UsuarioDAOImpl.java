@@ -221,13 +221,13 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                // Hash de la contraseña ingresada por el usuario
+                // Contraseña que va a meter el usuario en el login
                 String hashedPassword = HashUtil.hashPassword(password);
 
-                // Contraseña almacenada en la base de datos
+                // Contraseña de la base de datos
                 String storedPassword = rs.getString("password");
 
-                // Verificar que coincidan los hashes
+                // Comparo los hashes para ver si coincide la contraseña
                 if (hashedPassword.equals(storedPassword)) {
                     Usuario usuario = new Usuario();
                     int idx = 1;

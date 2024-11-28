@@ -13,24 +13,20 @@
             display: block;
             clear: both;
         }
-
-        /* Estilo para centrar el contenedor */
         .login-container {
-            width: 400px; /* Ancho del formulario */
-            margin: 0 auto; /* Centrado horizontal */
+            width: 400px;
+            margin: 0 auto;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
             background-color: #f9f9f9;
         }
 
-        /* Título */
         .login-title {
             text-align: center;
             margin-bottom: 20px;
         }
 
-        /* Estilo de los inputs */
         .form-group {
             margin-bottom: 15px;
         }
@@ -47,7 +43,6 @@
             border-radius: 4px;
         }
 
-        /* Estilo del botón */
         .login-button {
             background-color: #28a745;
             color: white;
@@ -58,10 +53,6 @@
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s ease;
-        }
-
-        .login-button:hover {
-            background-color: #218838;
         }
 
         /* Mensaje de error */
@@ -80,15 +71,12 @@
 
         <div id="contenedora" style="width: 100%; float: none; margin: 0 auto; text-align: center;">
 
-            <!-- Título de Login -->
             <div class="login-title">
                 <h1>Login</h1>
             </div>
 
-            <!-- Contenedor de Login -->
             <div class="login-container">
                 <form action="${pageContext.request.contextPath}/tienda/usuarios" method="post">
-                    <!-- Campo oculto para indicar que es un login -->
                     <input type="hidden" name="__method__" value="login" />
 
                     <!-- Usuario -->
@@ -103,7 +91,7 @@
                         <input type="password" id="password" name="password" required="required"/>
                     </div>
 
-                    <!-- Botón de Iniciar sesión -->
+                    <!-- Botón para iniciar sesión -->
                     <div class="form-group">
                         <button type="submit" class="login-button">Iniciar sesión</button>
                     </div>
@@ -111,7 +99,7 @@
 
             </div>
 
-            <!-- Error message display -->
+            <!-- Error que se comunica con el servlet para ver si el usuario mete credenciales k no existen -->
             <%
                 String errorMessage = (String) request.getAttribute("loginError");
                 if (errorMessage != null) {
@@ -123,7 +111,19 @@
                 }
             %>
 
-            <!-- Botón para volver o crear cuenta -->
+            <!-- Error que se comunica con el servlet para ver si el usuario mete credenciales k no existen -->
+            <%
+                String permError = (String) request.getAttribute("permError");
+                if (permError != null) {
+            %>
+            <div class="error-message">
+                <strong><%= permError %></strong>
+            </div>
+            <%
+                }
+            %>
+
+            <!-- Crear cuenta desde esta página por si no hay usuarios -->
             <div style="margin-top: 20px;">
                 <form action="${pageContext.request.contextPath}/tienda/usuarios/crear">
                     <input type="submit" value="Crear Cuenta">

@@ -37,41 +37,41 @@ public class UsuarioServlet extends HttpServlet {
         RequestDispatcher dispatcher;
         String pathInfo = request.getPathInfo();
 
-        // Verificar si la ruta es para login
+        // LOGIN
         if ("/login".equals(pathInfo)) {
-            // Ruta para mostrar el formulario de login
+            // LLÉVAME AL FORMULARIO DEL LOGIN
             dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/login.jsp");
 
         } else if ("/logout".equals(pathInfo)) {
-            // Si la ruta es /logout, invalidar la sesión y redirigir al login
+
+            // Si la ruta es /logout, cierra la sesión y redirige al login
             HttpSession session = request.getSession(false);
             if (session != null) {
-                session.invalidate(); // Invalidar la sesión
+                session.invalidate(); // Invalida la sesión
             }
-            response.sendRedirect(request.getContextPath() + "/tienda/usuarios/login"); // Redirigir al login
+            response.sendRedirect(request.getContextPath() + "/tienda/usuarios/login"); // Redirige al login
 
-            return;  // Salir del método para evitar continuar con el flujo normal
+            return;
 
         } else {
-            // Normalizar pathInfo, quitando la barra al final
+
             if (pathInfo != null) {
                 pathInfo = pathInfo.replaceAll("/$", "");
             }
             String[] pathParts = pathInfo != null ? pathInfo.split("/") : new String[]{};
 
-            // Caso cuando la ruta es simplemente "/usuarios" o "/usuarios/"
             if (pathParts.length == 0 || "/".equals(pathInfo)) {
-                // GET para la lista de usuarios
+
                 UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
                 request.setAttribute("usuarios", usuarioDAO.getAll());
                 dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/usuarios.jsp");
 
             } else if (pathParts.length == 2 && "crear".equals(pathParts[1])) {
-                // GET para la página de creación de usuario
+
                 dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/crear-usuario.jsp");
 
             } else if (pathParts.length == 2) {
-                // GET para ver detalles de un usuario: /usuarios/{id}
+
                 try {
                     int idUsuario = Integer.parseInt(pathParts[1]);
                     UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
@@ -110,7 +110,7 @@ public class UsuarioServlet extends HttpServlet {
                 }
 
             } else {
-                // Si la ruta no es reconocida, redirigimos a la lista de usuarios
+
                 response.sendRedirect(request.getContextPath() + "/tienda/usuarios");
                 return;
             }
@@ -128,7 +128,7 @@ public class UsuarioServlet extends HttpServlet {
         String __method__ = request.getParameter("__method__");
 
         if (__method__ == null) {
-            // Crear uno nuevo
+            // Crea uno nuevo
             UsuarioDAO usrDao = new UsuarioDAOImpl();
 
             String nombre = request.getParameter("nombre");
@@ -147,6 +147,7 @@ public class UsuarioServlet extends HttpServlet {
 
             try {
                 usrDao.create(usuario);
+                response.sendRedirect(request.getContextPath() + "/tienda/usuarios");
             } catch (NoSuchAlgorithmException e) {
                 throw new RuntimeException(e);
             }
@@ -154,13 +155,15 @@ public class UsuarioServlet extends HttpServlet {
         } else if (__method__ != null && "put".equalsIgnoreCase(__method__)) {
             // Actualizar uno existente
             doPut(request, response);
+            response.sendRedirect(request.getContextPath() + "/tienda/usuarios");
 
         } else if (__method__ != null && "delete".equalsIgnoreCase(__method__)) {
             // Borrar uno existente
             doDelete(request, response);
+            response.sendRedirect(request.getContextPath() + "/tienda/usuarios");
 
         } else if (__method__ != null && "login".equalsIgnoreCase(__method__)) {
-            // Manejar el login
+
             String nombreUsuario = request.getParameter("usuario");
             String password = request.getParameter("password");
 
@@ -169,25 +172,23 @@ public class UsuarioServlet extends HttpServlet {
 
             if (usuarioOpt.isPresent()) {
                 Usuario usuario = usuarioOpt.get();
-                // Guardar al usuario en la sesión
+
+                // Guarda al usuario en la sesión
                 request.getSession().setAttribute("usuarioLogueado", usuario);
-                // Redirigir a la página principal después de iniciar sesión
+
+                // Esta ruta termina redirigiendo a la ruta GET /(index home)
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
             } else {
+
                 // Si las credenciales no son correctas, mostrar error
                 request.setAttribute("loginError", "Usuario o contraseña incorrectos");
-                // Mostrar el formulario de login (forward)
+
                 dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/login.jsp");
                 dispatcher.forward(request, response);
             }
 
         }
     }
-
-
-
-
-
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
