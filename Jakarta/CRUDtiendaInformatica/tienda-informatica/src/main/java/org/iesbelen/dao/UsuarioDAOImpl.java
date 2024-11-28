@@ -1,6 +1,5 @@
 package org.iesbelen.dao;
 
-import org.iesbelen.model.Producto;
 import org.iesbelen.model.Usuario;
 import org.iesbelen.utils.HashUtil;
 
@@ -207,5 +206,48 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             closeDb(conn, ps, null);
         }
     }
+
+    @Override
+    public Optional<Usuario> validarUsuario(String nombreUsuario, String password) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = connectDB();
+            ps = conn.prepareStatement("SELECT * FROM usuarios WHERE usuario = ?");
+            ps.setString(1, nombreUsuario);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Hash de la contraseña ingresada por el usuario
+                String hashedPassword = HashUtil.hashPassword(password);
+
+                // Contraseña almacenada en la base de datos
+                String storedPassword = rs.getString("password");
+
+                // Verificar que coincidan los hashes
+                if (hashedPassword.equals(storedPassword)) {
+                    Usuario usuario = new Usuario();
+                    int idx = 1;
+                    usuario.setIdUsuario(rs.getInt(idx++));
+                    usuario.setNombreUsuario(rs.getString(idx++));
+                    usuario.setPassword(rs.getString(idx++));
+                    usuario.setRol(rs.getString(idx));
+
+                    return Optional.of(usuario);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(conn, ps, rs);
+        }
+
+        return Optional.empty();
+    }
+
+
 
 }

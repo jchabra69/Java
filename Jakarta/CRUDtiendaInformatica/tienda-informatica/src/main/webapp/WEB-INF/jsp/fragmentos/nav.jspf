@@ -1,10 +1,25 @@
-<!-- Menu Navigation Bar -->
+<%@ page import="org.iesbelen.model.Usuario" %>
 <nav class="menu">
     <a href="${pageContext.request.contextPath}">HOME</a>
     <a href="${pageContext.request.contextPath}/tienda/fabricantes/">Fabricantes</a>
     <a href="${pageContext.request.contextPath}/tienda/productos/">Productos</a>
     <a href="${pageContext.request.contextPath}/tienda/usuarios/">Usuarios</a>
+
     <div class="menu-log">
-        <a href="#login">LOGIN</a>
+        <%
+            // Variable navUsuario, para evitar conflicto con otras páginas
+            Usuario navUsuario = (Usuario) request.getSession(false).getAttribute("usuarioLogueado");
+            if (navUsuario != null) {
+        %>
+        <!-- Si está logueado, mostrar el enlace de logout -->
+        <a href="${pageContext.request.contextPath}/tienda/usuarios/logout">Logout</a>
+        <%
+        } else {
+        %>
+        <!-- Si no está logueado, mostrar el enlace de login -->
+        <a href="${pageContext.request.contextPath}/tienda/usuarios/login">Login</a>
+        <%
+            }
+        %>
     </div>
 </nav>

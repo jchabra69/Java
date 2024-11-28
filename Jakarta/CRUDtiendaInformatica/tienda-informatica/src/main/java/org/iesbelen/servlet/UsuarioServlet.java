@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.iesbelen.dao.*;
 import org.iesbelen.model.Usuario;
 import org.iesbelen.utils.HashUtil;
@@ -13,6 +14,7 @@ import org.iesbelen.utils.HashUtil;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet(name = "usuariosServlet", value = "/tienda/usuarios/*")
 public class UsuarioServlet extends HttpServlet {
@@ -35,24 +37,36 @@ public class UsuarioServlet extends HttpServlet {
         RequestDispatcher dispatcher;
         String pathInfo = request.getPathInfo();
 
-        if (pathInfo == null || "/".equals(pathInfo)) {
+        // Verificar si la ruta es para login
+        if ("/login".equals(pathInfo)) {
+            // Ruta para mostrar el formulario de login
+            dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/login.jsp");
 
-            // GET para la lista de usuarios: /usuarios/ o /usuarios
-            UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
+        } else if ("/logout".equals(pathInfo)) {
+            // Si la ruta es /logout, invalidar la sesión y redirigir al login
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate(); // Invalidar la sesión
+            }
+            response.sendRedirect(request.getContextPath() + "/tienda/usuarios/login"); // Redirigir al login
 
-
-            request.setAttribute("usuarios", usuarioDAO.getAll());
-
-
-            dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/usuarios.jsp");
+            return;  // Salir del método para evitar continuar con el flujo normal
 
         } else {
-            // GET para detalles de usuario o formularios de edición
-            pathInfo = pathInfo.replaceAll("/$", "");
-            String[] pathParts = pathInfo.split("/");
+            // Normalizar pathInfo, quitando la barra al final
+            if (pathInfo != null) {
+                pathInfo = pathInfo.replaceAll("/$", "");
+            }
+            String[] pathParts = pathInfo != null ? pathInfo.split("/") : new String[]{};
 
-            if (pathParts.length == 2 && "crear".equals(pathParts[1])) {
+            // Caso cuando la ruta es simplemente "/usuarios" o "/usuarios/"
+            if (pathParts.length == 0 || "/".equals(pathInfo)) {
+                // GET para la lista de usuarios
+                UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
+                request.setAttribute("usuarios", usuarioDAO.getAll());
+                dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/usuarios.jsp");
 
+            } else if (pathParts.length == 2 && "crear".equals(pathParts[1])) {
                 // GET para la página de creación de usuario
                 dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/crear-usuario.jsp");
 
@@ -106,7 +120,6 @@ public class UsuarioServlet extends HttpServlet {
     }
 
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -124,7 +137,6 @@ public class UsuarioServlet extends HttpServlet {
 
             Usuario usuario = new Usuario();
 
-
             usuario.setNombreUsuario(nombre);
             try {
                 usuario.setPassword(HashUtil.hashPassword(password));
@@ -132,9 +144,6 @@ public class UsuarioServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
             usuario.setRol(rol);
-
-
-            //Lo de cifrar la contraseña no se hace en DAO, sino aquí
 
             try {
                 usrDao.create(usuario);
@@ -144,19 +153,41 @@ public class UsuarioServlet extends HttpServlet {
 
         } else if (__method__ != null && "put".equalsIgnoreCase(__method__)) {
             // Actualizar uno existente
-            //Dado que los forms de html sólo soportan method GET y POST utilizo parámetro oculto para indicar la operación de actulización PUT.
             doPut(request, response);
 
         } else if (__method__ != null && "delete".equalsIgnoreCase(__method__)) {
             // Borrar uno existente
-            //Dado que los forms de html sólo soportan method GET y POST utilizo parámetro oculto para indicar la operación de actulización DELETE.
             doDelete(request, response);
-        } else {
-            System.out.println("Opción POST no soportada.");
-        }
 
-        response.sendRedirect(request.getContextPath() + "/tienda/usuarios");
+        } else if (__method__ != null && "login".equalsIgnoreCase(__method__)) {
+            // Manejar el login
+            String nombreUsuario = request.getParameter("usuario");
+            String password = request.getParameter("password");
+
+            UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
+            Optional<Usuario> usuarioOpt = usuarioDAO.validarUsuario(nombreUsuario, password);
+
+            if (usuarioOpt.isPresent()) {
+                Usuario usuario = usuarioOpt.get();
+                // Guardar al usuario en la sesión
+                request.getSession().setAttribute("usuarioLogueado", usuario);
+                // Redirigir a la página principal después de iniciar sesión
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
+            } else {
+                // Si las credenciales no son correctas, mostrar error
+                request.setAttribute("loginError", "Usuario o contraseña incorrectos");
+                // Mostrar el formulario de login (forward)
+                dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/usuarios/login.jsp");
+                dispatcher.forward(request, response);
+            }
+
+        }
     }
+
+
+
+
+
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
