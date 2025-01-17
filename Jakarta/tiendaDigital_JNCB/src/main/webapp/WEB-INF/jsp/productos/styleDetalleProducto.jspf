@@ -1,0 +1,65 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<style>
+    /* Estilo para el contenedor principal */
+    #contenedora {
+        float: none;
+        margin: 40px auto; /* Añadido margen superior de 40px para espacio entre nav y contenedor */
+        width: 900px;
+        background-color: white; /* Fondo blanco */
+        padding: 20px; /* Espaciado interior */
+        border-radius: 8px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    }
+
+    .clearfix::after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+
+    .clearfix {
+        margin-top: 20px;
+    }
+
+    .clearfix label {
+        font-weight: bold;
+    }
+
+    .clearfix input,
+    .clearfix textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 4px;
+        font-size: 14px;
+    }
+
+    .clearfix input[readonly="readonly"],
+    .clearfix textarea[readonly="readonly"] {
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+    }
+
+    .clearfix input[type="submit"] {
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .clearfix input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    .clearfix form {
+        text-align: center;
+    }
+
+    /* Mejorar los márgenes para el espacio entre el contenedor y el nav */
+    body {
+        margin-top: 70px; /* Asegurarse de que no se sobreponga al nav */
+    }
+</style>

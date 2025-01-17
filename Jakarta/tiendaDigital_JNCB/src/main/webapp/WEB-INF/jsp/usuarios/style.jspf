@@ -1,0 +1,87 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<style>
+    /* Estilos generales */
+    body {
+        background-color: #f0f0f0; /* Fondo gris claro para el cuerpo */
+        font-family: Arial, sans-serif; /* Fuente general */
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Contenedor principal */
+    .form-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 600px; /* Ajustado para reducir el ancho del formulario */
+        margin: 20px auto; /* Centrado y espaciado desde los bordes */
+    }
+
+    /* Título */
+    h1 {
+        text-align: center;
+        font-size: 32px; /* Tamaño de fuente aumentado para el título */
+        margin-bottom: 20px; /* Espacio debajo del título */
+    }
+
+    /* Estilo de los campos de texto */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    /* Estilo de las etiquetas */
+    label {
+        font-weight: bold;
+        font-size: 18px; /* Aumento del tamaño de la fuente de las etiquetas */
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    /* Estilo del botón */
+    .create-btn-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .btn {
+        background-color: #4CAF50; /* Color verde */
+        color: white;
+        padding: 12px 25px; /* Aumento del tamaño del botón */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px; /* Aumento del tamaño de la fuente del botón */
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    /* Estilo para la alerta o mensaje */
+    .alert {
+        padding: 10px;
+        margin-top: 15px;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    /* Estilos para el formulario y el contenedor */
+    .clearfix::after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+</style>

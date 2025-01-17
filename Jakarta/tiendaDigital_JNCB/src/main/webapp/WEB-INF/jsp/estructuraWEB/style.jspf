@@ -1,0 +1,129 @@
+<style>
+
+    .head1 {
+        font-size: 40px;
+        color: #8ad1d3;
+        font-weight: bold;
+        margin-left: 20px;
+    }
+
+    .head2 {
+        font-size: 18px;
+        margin-left: 20px;
+        margin-bottom: 15px;
+        color: white;
+    }
+
+    body {
+        margin: 0 auto;
+        background-position: center;
+        background-size: contain;
+        background-color: #222222;
+    }
+
+    .menu {
+        position: sticky;
+        top: 0;
+        background-color: #3a5c5d;
+        padding: 10px 20px;
+        color: white;
+        margin: 0 auto;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+
+    .menu-links {
+        display: flex;
+        justify-content: flex-start;
+        flex-grow: 1;
+    }
+
+    .menu a {
+        color: white;
+        text-align: center;
+        padding: 14px 12px;
+        text-decoration: none;
+        font-size: 20px;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    /* Estilo para el login */
+    .menu-login {
+        display: flex;
+        align-items: center;
+        margin-right: 30px; /* Espacio entre login y carrito */
+    }
+
+    .menu-login a {
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .menu-login i {
+        margin-right: 8px;
+    }
+
+    .menu-carrito {
+        display: flex;
+        align-items: center;
+    }
+
+    .menu-carrito a {
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .menu-carrito i {
+        margin-right: 8px;
+    }
+
+    footer {
+        width: 100%;
+        bottom: 0;
+        background-color: #000;
+        color: #fff;
+        position: absolute;
+        padding-top: 20px;
+        padding-bottom: 50px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .body_sec {
+        margin-left: 20px;
+    }
+
+    .fas.fa-shopping-cart, .fas.fa-user {
+        font-size: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .menu {
+            flex-direction: column;
+        }
+
+        .menu a {
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+
+        .menu-carrito {
+            margin-top: 10px;
+        }
+
+        /* Cambio de estilo en el login en pantallas pequeñas */
+        .menu-login {
+            margin-right: 0;
+            margin-top: 10px;
+        }
+    }
+</style>

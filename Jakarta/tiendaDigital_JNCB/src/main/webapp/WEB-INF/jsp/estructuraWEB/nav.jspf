@@ -1,0 +1,47 @@
+<%@ page import="org.iesbelen.model.Usuario" %>
+<nav class="menu">
+
+    <div class="menu-links">
+        <a href="${pageContext.request.contextPath}/">Inicio</a>
+        <a href="${pageContext.request.contextPath}/tienda/categorias/">Categorias</a>
+        <a href="${pageContext.request.contextPath}/tienda/productos/">Productos</a>
+        <a href="${pageContext.request.contextPath}/tienda/usuarios/">Usuarios</a>
+        <a href="${pageContext.request.contextPath}/tienda/pedidos/">Pedidos</a>
+    </div>
+
+    <!-- Carrito de Compra -->
+    <div class="menu-carrito">
+        <a href="${pageContext.request.contextPath}/tienda/carrito/">
+            <i class="fas fa-shopping-cart"></i> Carrito
+        </a>
+    </div>
+
+    <!-- Icono de Login -->
+    <div class="menu-login">
+
+        <%
+            // Compruebo si el usuario está logueado
+            Usuario navUsuario = (Usuario) request.getSession(false).getAttribute("usuarioLogueado");
+            if (navUsuario != null) {
+                long currentTime = System.currentTimeMillis();
+                long sessionDuration = (currentTime - request.getSession().getCreationTime()) / 1000; // Duración de la sesión en segundos
+        %>
+        <!-- Si está logueado, muestro su nombre-->
+        <div><%= navUsuario.getNombre() %></div>
+        <a href="${pageContext.request.contextPath}/tienda/usuarios/logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+        <%
+        } else {
+        %>
+        <!-- Si no está logueado, muestro el login -->
+        <a href="${pageContext.request.contextPath}/tienda/usuarios/login">
+            <i class="fas fa-user"></i> Login
+        </a>
+        <%
+            }
+        %>
+
+    </div>
+
+</nav>

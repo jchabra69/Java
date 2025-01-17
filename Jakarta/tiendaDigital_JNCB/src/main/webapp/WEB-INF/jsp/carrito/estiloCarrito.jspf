@@ -1,0 +1,149 @@
+<%@ page contentType="text/css" %>
+<style>
+    /* Estilo general para el carrito */
+.carrito-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.carrito-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.carrito-header h2 {
+    font-size: 2rem;
+    color: #333;
+}
+
+/* Contenedor de los productos del carrito */
+.producto-carrito {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.producto-carrito img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.producto-carrito .producto-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.producto-carrito .producto-info h5 {
+    font-size: 1.2rem;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.producto-carrito .producto-info p {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+/* Botones para eliminar y cantidad */
+.producto-carrito .producto-info .eliminar-btn,
+.producto-carrito .producto-info .cantidad-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.producto-carrito .producto-info .eliminar-btn:hover,
+.producto-carrito .producto-info .cantidad-btn:hover {
+    background-color: #c82333;
+}
+
+/* Contenedor del total */
+.total-carrito {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.total-carrito .total-label {
+    margin-right: 20px;
+}
+
+.total-carrito .total-valor {
+    color: #28a745;
+}
+
+/* Botón para confirmar la compra */
+.btn-confirmar-compra {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.btn-confirmar-compra:hover {
+    background-color: #0056b3;
+}
+
+/* Mensaje de advertencia si el carrito está vacío */
+.mensaje-vacio {
+    text-align: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #888;
+    font-size: 1.1rem;
+}
+
+/* Estilo para botones de volver a la tienda */
+.btn-volver {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-volver:hover {
+    background-color: #218838;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .producto-carrito {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .producto-carrito .producto-info {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+</style>
+}
+
+

@@ -1,0 +1,7 @@
+<nav class="menu">
+    <a href="${pageContext.request.contextPath}">HOME</a>
+    <a href="${pageContext.request.contextPath}/empresa/empleado/">Empleados</a>
+    <a href="${pageContext.request.contextPath}/empresa/departamento/">Departamentos</a>
+
+
+</nav>

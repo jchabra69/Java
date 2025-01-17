@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact name="Ejercicio3_war_exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Ejercicio3_war_exploded</output-path>
+    <root id="root">
+      <element id="artifact" artifact-name="Ejercicio3:war exploded" />
+    </root>
+  </artifact>
+</component>
